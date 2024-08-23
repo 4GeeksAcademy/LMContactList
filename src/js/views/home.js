@@ -7,9 +7,6 @@ export const Home = () => {
     return(
       <>
       <ContactCard />
-      <ContactCard />
-      <ContactCard />
-      <ContactCard />
       </>  
     );
 };
