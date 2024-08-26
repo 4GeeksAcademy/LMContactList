@@ -1,13 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../../styles/home.css";
-import ContactCard from "./contactcard";
+
 
 
 export const Home = () => {
     return(
-      <>
-      <ContactCard />
-      </>  
+      <div className="container">
+      PAGINA DE INICIO
+     </div>
     );
 };
 	

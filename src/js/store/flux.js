@@ -1,3 +1,5 @@
+import { element } from "prop-types";
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -106,12 +108,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			deleteContact: (contactId) => {
 				fetch(`https://playground.4geeks.com/contact/agendas/letimachado/contacts/${contactId}`,{
+					method: 'DELETE',
+				})
+				.then((response) => {
+					const store = getStore();
+					if(response.status === 204) {
+					console.log("entro el if 204");
+					setStore({ contacts: store.contacts.filter(element => element.id !== contactId) })
+					}
+				})
+
+				.catch((error) => console.log(error))
+			},
+			updateContact: (contactId, name, phone, email, address) => {
+				const store = getStore();
+				fetch(`https://playground.4geeks.com/contact/agendas/letimachado/contacts/${contactId}`,{
 					method: 'PUT',
 					body: JSON.stringify({
 						"name": name,
 						"phone": phone,
 						"email": email,
 						"address": address
+						
 					}),
 					headers: {
 						'Content-Type': 'application/json'
@@ -123,12 +141,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				})
 				.then((data) => {
-					if(data){
+					if(data) {
+						const updatedArray = store.contacts.map((item) => {
+							if(item.id == contactId) {
+								return data;
+							}
+							return item;
+						})
 
-						const updatedArray = store.contacts.map((item))
+						console.log(store.selectedContact);
+						setStore({ contacts : updatedArray });
+						console.log(data);
 					}
 				})
+				.catch((error) => console.log(error));
+			},
+			getContact: (contactId) => {
+				const store = getStore();
+				const contact = store.contacts.find(contact => contact.id === parseInt(contactId));
+				setStore({ selectContact: contact});
 			}
+
 		}
 	};
 };
